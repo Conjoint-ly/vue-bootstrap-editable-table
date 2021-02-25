@@ -6,11 +6,8 @@
     ]"
     :title="capitalize(field.type)"
     :width="field.width"
-    :draggable="!readyToResize && field.name !== 'name'"
-    @dragstart="$emit('drag', field.name)"
-    @dragover.prevent
-    @drop="$emit('drop', field.name)"
-    >
+    :id="field.name"
+  >
 
     <div
       v-if="field.name !== 'name'"
@@ -19,6 +16,7 @@
       <b-button
         class="t-head-cell__move"
         variant="link"
+        id="dragElement"
       >
         <b-icon icon="arrows-move" />
       </b-button>
