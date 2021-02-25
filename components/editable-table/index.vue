@@ -1,17 +1,23 @@
 <template>
   <div class="table-wrapper">
-    <div class="table">
-      <t-head
-        class="table-header"
-        :fields="tempFields"
-        @add-col="$emit('add-col', $event)"
-        @del-col="$emit('del-col', $event)"
-        @resize-col="resizeColumn"
-        @resize-col-stop="submitColumnResizing"
-        @move-col="$emit('move-col', $event)"
-      />
+    <div class="table" >
+      <div
+        class="t-head-wrapper"
+        @mouseover="isTableHeaderHovering = true"
+        @mouseout="isTableHeaderHovering = false"
+      >
+        <t-head
+          class="table-header"
+          :fields="tempFields"
+          @add-col="$emit('add-col', $event)"
+          @del-col="$emit('del-col', $event)"
+          @resize-col="resizeColumn"
+          @resize-col-stop="submitColumnResizing"
+          @move-col="$emit('move-col', $event)"
+        />
+      </div>
 
-      <div class="table-body-wrapper">
+      <div class="table-body-wrapper" :style="{'height': tableBodyWrapperHeight}">
         <div class="table-body" v-click-outside="onClickOutside">
           <t-row
             v-for="(row, i) in rows" :key="String(row.name).replace(/ /g, '_')"
@@ -74,9 +80,13 @@ export default {
       },
       resizingProps: null,
       draggingRow: null,
+      isTableHeaderHovering: false,
     }
   },
   computed: {
+    tableBodyWrapperHeight () {
+      return `calc(100vh - ${this.isTableHeaderHovering ? 80 : 50}px - 4rem)`;
+    },
     columns () {
       return this.tempFields.map((field) => ({
         ...field,
@@ -192,13 +202,19 @@ export default {
   }
 
   .table-body-wrapper {
-    height: calc(100vh - 50px - 4rem);
     overflow: auto;
     padding-left: 30px;
+    transition: height 0.25s ease-in-out;
   }
 
   .table-header {
     padding-left: 30px;
+    height: 50px;
+    transition: height 0.25s ease-in-out;
+  }
+
+  .table-header:hover {
+    height: 80px;
   }
 
   .table {

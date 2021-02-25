@@ -115,11 +115,10 @@
   .t-head-func-buttons-wrapper {
     display: none;
     position: absolute;
-    top: -31px;
+    top: 0;
     right: 0;
     width: 100%;
     height: 30px;
-    background-color: #efefef;
     justify-content: space-around;
     align-items: center;
   }
