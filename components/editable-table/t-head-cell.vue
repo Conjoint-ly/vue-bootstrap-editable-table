@@ -6,11 +6,8 @@
     ]"
     :title="capitalize(field.type)"
     :width="field.width"
-    :draggable="!readyToResize && field.name !== 'name'"
-    @dragstart="$emit('drag', field.name)"
-    @dragover.prevent
-    @drop="$emit('drop', field.name)"
-    >
+    :id="field.name"
+  >
 
     <div
       v-if="field.name !== 'name'"
@@ -19,6 +16,7 @@
       <b-button
         class="t-head-cell__move"
         variant="link"
+        id="dragElement"
       >
         <b-icon icon="arrows-move" />
       </b-button>
@@ -117,11 +115,10 @@
   .t-head-func-buttons-wrapper {
     display: none;
     position: absolute;
-    top: -31px;
+    top: 0;
     right: 0;
     width: 100%;
     height: 30px;
-    background-color: #efefef;
     justify-content: space-around;
     align-items: center;
   }

@@ -1,5 +1,11 @@
 <template>
-  <div class="tr th">
+  <draggable
+    tag="div"
+    :list="fields"
+    class="tr th"
+    handle="#dragElement"
+    @end="onEndDrag($event)"
+  >
     <t-head-cell
       v-for="field in fields"
       :key="field.name"
@@ -7,8 +13,6 @@
       @delete="onClickDelete"
       @resize="$emit('resize-col', { name: field.name, width: $event })"
       @resize-stop="$emit('resize-col-stop')"
-      @drag="draggingColumn = $event"
-      @drop="moveColumn($event)"
     />
 
     <t-data
@@ -28,7 +32,7 @@
       @submit="addColumn"
       @close="showModal = false"
     />
-  </div>
+  </draggable>
 </template>
 
 <script>
@@ -36,6 +40,7 @@ import { getFieldIndex } from "../../helpers/fields";
 import tData from './t-data.vue';
 import AddColumnModal from '../add-column-modal';
 import THeadCell from "./t-head-cell";
+import draggable from 'vuedraggable';
 
 export default {
   name: 't-head',
@@ -43,6 +48,7 @@ export default {
     THeadCell,
     tData,
     AddColumnModal,
+    draggable
   },
   props: {
     fields: { type: Array, required: true },
@@ -50,7 +56,6 @@ export default {
   data () {
     return {
       showModal: false,
-      draggingColumn: null,
     }
   },
   inject: ['columnTypes'],
@@ -63,27 +68,35 @@ export default {
     }
   },
   methods: {
+    arrayMove (arr, old_index, new_index) {
+      if (new_index >= arr.length) {
+        let k = new_index - arr.length + 1;
+        while (k--) {
+          arr.push(undefined);
+        }
+      }
+      arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+      return arr;
+    },
+    onEndDrag(e) {
+      let newIndex = 1;
+
+      if (e.newIndex === 0) {
+        this.arrayMove(this.fields, 0, 1);
+      } else {
+        newIndex = e.newIndex;
+      }
+
+      this.$emit('move-col', {
+        name: e.item.id,
+        index: newIndex,
+      });
+    },
     onClickDelete(fieldName) {
       this.$emit('del-col', fieldName);
     },
     addColumn (column) {
       this.$emit('add-col', column);
-    },
-    moveColumn (target) {
-      if (!this.draggingColumn) return;
-
-      const index = getFieldIndex(this.fields, target);
-      const currentIndex = getFieldIndex(this.fields, this.draggingColumn);
-      if (index === -1 || currentIndex === -1) return;
-      if (index === 0 || currentIndex === 0) return;// not allowed for first column
-
-      const nextIndex = index - (currentIndex < index ? 1 : 0);
-      if (nextIndex === currentIndex) return;
-
-      this.$emit('move-col', {
-        name: this.draggingColumn,
-        index: nextIndex,
-      });
     },
     moveLastColumn () {
       if (!this.draggingColumn) return;
