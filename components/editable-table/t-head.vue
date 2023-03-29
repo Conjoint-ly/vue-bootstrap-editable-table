@@ -17,7 +17,7 @@
       @dragover.prevent
       @drop="moveLastColumn"
     >
-      <b-button class="px-2 py-1" variant="link" @click="showModal = true">
+      <b-button class="px-2 py-1" variant="link" @click="showModal = true" title="Add Element">
         <b-icon icon="plus" font-scale="2" />
       </b-button>
     </t-data>

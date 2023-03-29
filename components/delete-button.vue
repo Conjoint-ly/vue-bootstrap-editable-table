@@ -1,5 +1,5 @@
 <template>
-  <small-button v-bind="$attrs" v-on="$listeners">
+  <small-button v-bind="$attrs" v-on="$listeners" title="Delete element">
     <b-icon icon="x" />
   </small-button>
 </template>

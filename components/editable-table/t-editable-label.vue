@@ -7,6 +7,7 @@
       v-model="label"
       @focusout="setInactive"
       @keyup.enter="active = false"
+      
     />
   </div>
 </template>

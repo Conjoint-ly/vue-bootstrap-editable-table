@@ -1,5 +1,5 @@
 <template>
-  <small-button class="move-button" v-bind="$attrs" v-on="$listeners">
+  <small-button class="move-button" v-bind="$attrs" v-on="$listeners" title="Move element">
     <b-icon icon="arrows-move" />
   </small-button>
 </template>

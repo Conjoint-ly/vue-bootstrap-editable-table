@@ -203,9 +203,6 @@ export default {
     position: relative;
     max-height: calc(100vh - 4rem);
     overflow-y: auto;
-  }
-
-  .table-body-wrapper {
     overflow: auto;
   }
 
